@@ -1,0 +1,91 @@
+Audrey Stephan M1 app MIAGE
+
+Devoir Airline Management System
+
+	L’objectif est de mettre en place une application aéroportuaire destinée aux clients. 
+Ce dernier aura l’opportunité de créent des aéroports, créent des compagnies et de créent des vols. 
+	Cette application compte plusieurs possibilités, qui sont les suivantes : la création d’un aéroport, la création d’un vol pour une compagnie, la création des sections tarifaires,  la possibilité de trouver parmi tous les vols ceux où il reste des sièges de libres, réserver un ou plusieurs sièges, voir toutes les informations concernant un objet.
+
+Le fonctionnement de l’application :
+ 	Les créations s’articulent autour de la classe SystemManager, c'est le point d'entrée. Cette classe est la base de l’application, elle ne possède aucun aéroport ou compagnie aérienne.
+Cette classe possède les méthodes suivantes :
+
+- CreateAirport qui est du type Airport et permet de créer les aéroports dont le code N est unique et à une longueur de 3.
+- CreateAirline qui permet de créer les compagnies dont le nom N est unique et ne dépasse pas les 5 caractères.
+- CreateFlight crée les vols et est invoqué par la classe Airline. 
+- CreateSection crée les sections tarifaires qui correspondent à une compagnie de classe S pour un vol identifié par flID. 
+On peut, également trouver les vols dans lesquels, il reste des sièges de libre. Et permet d’afficher toute les informations qui ont été créé précédemment.
+	La classe Airport, elle indique le nom d’un aéroport et ce nom doit avoir une longueur de 3 caractères.
+
+
+
+
+	La classe Airline, qui représente une compagnie aérienne, elle va reprendre la création d’un vol, la création des sections tarifaires et le fait de trouver un vol ou il reste des places de libres. Elle aura en  plus la possibilité de réserver un ou plusieurs sièges (dont la position correspond à une ligne et une colonne).
+Cette classe possède les méthodes suivantes :
+
+- CreateFlight qui crée un vol pour une compagnie aérienne avec une origine, destination, une date et un identifiant unique. 
+- Une ArrayList, ArrayList<flight> getAvailableFlight qui permet de voir tous les vols dont il reste des sièges de libres, ceci est inscrits dans un tableau. 
+Ce qui permet de répondre à la méthode HasAvailabeSeats et FindAvailableFlights.
+- FindFlight permet de trouver un vol à partir de son identifiant N.
+- CreateSection permet de créer une section tarifaire de classe S, donc par rapport au siège.
+- bookFlight va réserver un siège de la compagnie du vol.
+
+La classe Flight possède une date de vol, un identifiant qui est unique, il nous faut également deux objets tels que l’origine et la destination du vol (non mentionné). Elle possède un objet de type Airline. 
+Cette classe possède les méthodes suivantes :
+
+- hasSection() permet de savoir si le vol détient des sections.
+- hasSeat() permet de savoir si elle possède encore des places.
+- CreateSection() permet de créer des sections pour un vol d’après la classe Airline.
+- FindSection() permet de trouver une section en particulier (en fonction du nom).
+- bookSeat() est une méthode de SystemManager, qui réserve un siège.
+
+	La classe FlightSection, va nous préciser si la section tarifaire possède oui ou non encore des sièges. Elle permet de réserver le premier siège disponible (on ne le choisit pas, ceci n’est pas mentionné). Et permet de réserver un siège selon le paramètre sID (d’après la classe Seat).
+Une section tarifaire contient au plus 100 rangées de sièges et au plus 10 sièges par rangées.
+Elle possède différents types de classe comme, FIRST, BUSI et ECO qui sont dans une énumération. Elles sont associé à une classe tarifaire. 
+Cette classe possède les méthodes suivantes :
+
+- hasAvailableSeats qui permet de savoir si une section possède encore des places.
+- bookSeat qui permet de réserver un siège (libre). Elle fait référence à l'ArrayList de Airline.
+- bookSeat (seatID sID) est de type boolean elle fait référence à seatID.
+	La classe Seat définit un siège par un identifiant, une rangée et une colonne et possède un statut pour savoir si ce siège a été réservé ou non.
+La classe SeatID correspond à l’identifiant d’un siège. A savoir que cette identifiant doit être unique. Il est crée en fonction de row et column (ligne et colonne).
+
+
+
+
+
+Les designs patterns :
+	A travers l’énoncé, on peut s’apercevoir que lors du développement des design patterns de création pourront être mis en place. 
+
+Tout d'abord, le design pattern Singleton avec la classe SystemManager puisqu'elle est le point d'entrée de l'application. Elle garantie une unique instance d'une classe donnée. Elle offre un point d'accès universel, son fonctionnement est unique au sein de l'application. SystemManager est appelé par toutes les couches de l'application. 
+
+Puis le design pattern Factory, puisque Airline, Flight, FlightSection, Seat et Airport sont liée à la classe SystemManager. C'est à dire que Airline doit obligatoirement passé par SystemManager pour pouvoir être crée, par rapport à createAirline(). C'est une sorte de couple. C'est la même chose pour les autres classes citées au début.
+Nous avons SystemManager puis les différentes sous classe qui sont  Airline, Flight, FlightSection, Seat et Airport. 
+Donc, nous pouvons dire que Factory permet de définir une interface pour la création d'un objet, mais en laissant aux sous classes le choix des classes à instancier.
+
+
+
+
+
+
+Les tests :	
+	Notre application a besoin de comporter des tests pour éviter toute forme d’erreur à la livraison.
+
+Les tests que nous pouvons réaliser sont les suivants :
+-	Vérifier que l’origine et la destination sont différentes (classe Flight).
+-	Vérifier si l’aéroport existe bien (classe SystemManager).
+-	Vérifier si le vol existe bien (classe Airline).
+-	Vérifier que deux aéroports ne possèdent pas le même nom pour éviter les doublons (classe Airline).
+-	Vérifier que le nom des compagnies n’ont pas la même pour éviter les doublons (classe SystemManager).
+-	Vérifier que le nom de la compagnie possède  les caractères inférieur ou égale a 5 (classe SystemManager).
+-	Vérifier que le nom de la compagnie existe (classe SystemManager).
+-	Vérifier qu’il y a bien encore des sièges de disponible pour une compagnie (classe Airline).
+-	Vérifier que le nom de l’aéroport possède bien 3 caractères (classe SystemManager).
+-	Vérifier que l’aéroport existe (classe SystemManager).
+-	Vérifier que l’ID d’un vol est unique pour éviter les doublons (classe Flight).
+-	Vérifier qu’il y a bien au moins un siège par vol (classe Airline).
+-	Vérifier que l’origine et la destination existe bien (classe Flight).
+-	Vérifier que au début de l'application il y est zéro vol de crée dans Airline.
+-	Vérifier que chaque section possède au moins un siège.
+
+
